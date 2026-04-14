@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class clsNEmpleado implements clsIEmpleado{
 
-    // Instancia de la conexión
+    //INSTANCIA DE LA CONEXION
     clsConexion cn = new clsConexion();
     Connection con;
     PreparedStatement ps;
@@ -27,7 +27,7 @@ public class clsNEmpleado implements clsIEmpleado{
     @Override
     public ResultSet mtdListarEmpleado() {
         
-        // Usamos JOIN para traer el nombre del cargo en lugar de solo el ID
+        //SENTENCIA SQL PARA LISTAR INFORMACION DE LA TABLA
         String sql = "SELECT e.*, c.descripcion AS nombre_cargo FROM tbempleado e " +
                      "INNER JOIN tbcargo c ON e.idcargo = c.codigo";
         try {
@@ -45,12 +45,15 @@ public class clsNEmpleado implements clsIEmpleado{
     @Override
     public boolean mtdAgregarEmpleado(clsEEmpleado objEE) {
         
+        //SENTENCIA SQL PARA INSERTAR VALORES A LA TABLA
         String sql = "INSERT INTO tbempleado (dni, idcargo, nombre, direccion, telefono, email, usuario, clave, estado) " +
                      "VALUES (?,?,?,?,?,?,?,?,?)";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR LOS VALORES A INSERTAR
             ps.setString(1, objEE.getDni());
             ps.setInt(2, objEE.getIdcargo()); // FK de la tabla cargo
             ps.setString(3, objEE.getNombre());
@@ -72,6 +75,8 @@ public class clsNEmpleado implements clsIEmpleado{
     @Override
     public boolean mtdModificarEmpleado(clsEEmpleado objEE) {
         
+        //SENTENCIA SQL PARA ACTUALIZAR LA INFORMACION DE UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL DNI
         String sql = "UPDATE tbempleado SET idcargo=?, nombre=?, direccion=?, telefono=?, email=?, usuario=?, clave=?, estado=? " +
                      "WHERE dni=?";
         
@@ -99,6 +104,8 @@ public class clsNEmpleado implements clsIEmpleado{
     @Override
     public boolean mtdEliminarEmpleado(clsEEmpleado objEE) {
         
+        //SENTENCIA SQL PARA ELIMINAR UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL DNI
         String sql = "DELETE FROM tbempleado WHERE dni=?";
         
         try {
@@ -117,11 +124,15 @@ public class clsNEmpleado implements clsIEmpleado{
     @Override
     public ResultSet mtdBuscarEmpleado(clsEEmpleado objEE) {
         
+        //SENTENCIA SQL PARA LISTAR LA INFORMACION
+        //SEGUN LA REFERENCIA AL VALOR CODIGO
         String sql = "SELECT * FROM tbempleado WHERE dni=?";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //PASAMOS LA REFERENCIA CON LA QUE BUSCAMOS LAS FILAS
             ps.setString(1, objEE.getDni());
             rs = ps.executeQuery();
             return rs;

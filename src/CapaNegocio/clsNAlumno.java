@@ -129,7 +129,7 @@ public class clsNAlumno implements clsIAlumno{
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
 
-            // Pasamos el código que viene desde el objeto entidad
+            //PASAMOS LA REFERENCIA CON LA QUE BUSCAMOS LAS FILAS
             ps.setString(1, objEA.getCodigo());
 
             rs = ps.executeQuery();

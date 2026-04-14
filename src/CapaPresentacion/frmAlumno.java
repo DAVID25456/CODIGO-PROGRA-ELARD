@@ -324,21 +324,24 @@ public class frmAlumno extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    //FUNCIONALIDAD DEL BOTON AGREGAR
+
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+        //INSTANCIAR LAS CLASES
         clsEAlumno objEA = new clsEAlumno();
         clsNAlumno objNA = new clsNAlumno();
         
+        //ELEMENTOS A INSERTAR
         objEA.setCodigo(txtCodigo.getText());
         objEA.setNombre(txtNombre.getText());
         objEA.setDireccion(txtDireccion.getText());
         objEA.setTelefono(txtTelefono.getText());
         objEA.setEmail(txtEmail.getText());
 
+        //VERIFICAR QUE SE INSERTARON LOS ELEMENTOS A LA BASE DE DATOS
         if (objNA.mtdAgregarAlumno(objEA)) {
             JOptionPane.showMessageDialog(null, "Alumno guardado con éxito");
-            mtdListar(); // Método para refrescar la tabla
+            mtdListar();
         } else {
             JOptionPane.showMessageDialog(null, "Error al guardar");
         }
@@ -347,25 +350,21 @@ public class frmAlumno extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         
-        // 1. Instanciar clases
+        //INSTANCIAR LAS CLASES
         clsEAlumno objEA = new clsEAlumno();
         clsNAlumno objNA = new clsNAlumno();
 
-        // 2. Cargar los datos actuales de los campos de texto al objeto Entidad
+        //ACTUALIZAR CON LOS ELEMENOS ACTUALES INGRESADOS
         objEA.setCodigo(txtCodigo.getText());
         objEA.setNombre(txtNombre.getText());
         objEA.setDireccion(txtDireccion.getText());
         objEA.setTelefono(txtTelefono.getText());
         objEA.setEmail(txtEmail.getText());
 
-        // 3. Ejecutar la actualización en la Capa de Negocio
+        //VERIFICAR QUE SE MODIFICARON LOS ELEMENTOS EN LA BASE DE DATOS
         if (objNA.mtdModificarAlumno(objEA)) {
             JOptionPane.showMessageDialog(null, "Registro actualizado correctamente");
-
-            // 4. Refrescar la tabla para ver los cambios
             mtdListar(); 
-
-            // 5. Volver a habilitar el código si lo habías bloqueado
             txtCodigo.setEditable(true);
         } else {
             JOptionPane.showMessageDialog(null, "Error al intentar actualizar el registro");
@@ -375,6 +374,7 @@ public class frmAlumno extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         
+        //INSTANCIAR LAS CLASES
         clsEAlumno objEA = new clsEAlumno();
         clsNAlumno objNA = new clsNAlumno();
         

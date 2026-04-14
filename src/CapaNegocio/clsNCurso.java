@@ -7,7 +7,6 @@ package CapaNegocio;
 import CapaConexion.clsConexion;
 import CapaEntidad.clsECurso;
 import CapaInterface.clsICurso;
-import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -19,7 +18,7 @@ import java.sql.SQLException;
  */
 public class clsNCurso implements clsICurso{
 
-    // Instancia de la conexión
+    //INSTANCIA DE LA CONEXION
     clsConexion cn = new clsConexion();
     Connection con;
     PreparedStatement ps;
@@ -28,6 +27,7 @@ public class clsNCurso implements clsICurso{
     @Override
     public ResultSet mtdListarCurso() {
         
+        //SENTENCIA SQL PARA LISTAR INFORMACION DE LA TABLA
         String sql = "SELECT * FROM tbcurso";
         try {
             con = cn.getConnection();
@@ -44,13 +44,16 @@ public class clsNCurso implements clsICurso{
     @Override
     public boolean mtdAgregarCurso(clsECurso objEC) {
         
+        //SENTENCIA SQL PARA INSERTAR VALORES A LA TABLA
         String sql = "INSERT INTO tbcurso (codigo, nombre, creditos, prerequisito) VALUES (?,?,?,?)";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR LOS VALORES A INSERTAR
             ps.setString(1, objEC.getCodigo());
             ps.setString(2, objEC.getNombre());
-            ps.setInt(3, objEC.getCreditos()); // Manejo de entero
+            ps.setInt(3, objEC.getCreditos());
             ps.setString(4, objEC.getPrerequisito());
 
             return ps.executeUpdate() != 0;
@@ -64,13 +67,19 @@ public class clsNCurso implements clsICurso{
     @Override
     public boolean mtdModificarCurso(clsECurso objEC) {
         
+        //SENTENCIA SQL PARA ACTUALIZAR LA INFORMACION DE UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "UPDATE tbcurso SET nombre=?, creditos=?, prerequisito=? WHERE codigo=?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR VALORES A MODIFICAR
             ps.setString(1, objEC.getNombre());
             ps.setInt(2, objEC.getCreditos());
             ps.setString(3, objEC.getPrerequisito());
+            
+            //ESTE ES EL VALOR DE REFERENCIA
             ps.setString(4, objEC.getCodigo());
 
             return ps.executeUpdate() != 0;
@@ -84,6 +93,8 @@ public class clsNCurso implements clsICurso{
     @Override
     public boolean mtdEliminarCurso(clsECurso objEC) {
         
+        //SENTENCIA SQL PARA ELIMINAR UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "DELETE FROM tbcurso WHERE codigo=?";
         try {
             con = cn.getConnection();
@@ -101,10 +112,14 @@ public class clsNCurso implements clsICurso{
     @Override
     public ResultSet mtdBuscarCurso(clsECurso objEC) {
         
+        //SENTENCIA SQL PARA LISTAR LA INFORMACION
+        //SEGUN LA REFERENCIA AL VALOR CODIGO
         String sql = "SELECT * FROM tbcurso WHERE codigo=?";
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //PASAMOS LA REFERENCIA CON LA QUE BUSCAMOS LAS FILAS
             ps.setString(1, objEC.getCodigo());
             rs = ps.executeQuery();
             return rs;

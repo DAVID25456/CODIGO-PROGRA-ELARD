@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class clsNDocente implements clsIDocente{
 
-    // Instancia de la conexión
+    //INSTANCIA DE LA CONEXION
     clsConexion cn = new clsConexion();
     Connection con;
     PreparedStatement ps;
@@ -27,6 +27,7 @@ public class clsNDocente implements clsIDocente{
     @Override
     public ResultSet mtdListarDocente() {
         
+        //SENTENCIA SQL PARA LISTAR INFORMACION DE LA TABLA
         String sql = "SELECT * FROM tbdocente";
         
         try {
@@ -44,11 +45,14 @@ public class clsNDocente implements clsIDocente{
     @Override
     public boolean mtdAgregarDocente(clsEDocente objED) {
         
+        //SENTENCIA SQL PARA INSERTAR VALORES A LA TABLA
         String sql = "INSERT INTO tbdocente (codigo, nombre) VALUES (?,?)";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR LOS VALORES A INSERTAR
             ps.setString(1, objED.getCodigo());
             ps.setString(2, objED.getNombre());
 
@@ -63,6 +67,8 @@ public class clsNDocente implements clsIDocente{
     @Override
     public boolean mtdModificarDocente(clsEDocente objED) {
         
+        //SENTENCIA SQL PARA ACTUALIZAR LA INFORMACION DE UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "UPDATE tbdocente SET nombre=? WHERE codigo=?";
         
         try {
@@ -82,6 +88,8 @@ public class clsNDocente implements clsIDocente{
     @Override
     public boolean mtdEliminarDocente(clsEDocente objED) {
         
+        //SENTENCIA SQL PARA ELIMINAR UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "DELETE FROM tbdocente WHERE codigo=?";
         
         try {
@@ -100,12 +108,15 @@ public class clsNDocente implements clsIDocente{
     @Override
     public ResultSet mtdBuscarDocente(clsEDocente objED) {
         
-        // Buscamos coincidencia exacta por código
+        //SENTENCIA SQL PARA LISTAR LA INFORMACION
+        //SEGUN LA REFERENCIA AL VALOR CODIGO
         String sql = "SELECT * FROM tbdocente WHERE codigo=?";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //PASAMOS LA REFERENCIA CON LA QUE BUSCAMOS LAS FILAS
             ps.setString(1, objED.getCodigo());
             rs = ps.executeQuery();
             return rs;
