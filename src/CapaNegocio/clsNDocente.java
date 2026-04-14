@@ -1,0 +1,119 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package CapaNegocio;
+
+import CapaConexion.clsConexion;
+import CapaEntidad.clsEDocente;
+import CapaInterface.clsIDocente;
+import java.sql.ResultSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author david
+ */
+public class clsNDocente implements clsIDocente{
+
+    // Instancia de la conexión
+    clsConexion cn = new clsConexion();
+    Connection con;
+    PreparedStatement ps;
+    ResultSet rs;
+    
+    @Override
+    public ResultSet mtdListarDocente() {
+        
+        String sql = "SELECT * FROM tbdocente";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            return rs;
+        } catch (SQLException e) {
+            System.out.println("Error al listar docentes: " + e.getMessage());
+            return null;
+        }
+        
+    }
+
+    @Override
+    public boolean mtdAgregarDocente(clsEDocente objED) {
+        
+        String sql = "INSERT INTO tbdocente (codigo, nombre) VALUES (?,?)";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, objED.getCodigo());
+            ps.setString(2, objED.getNombre());
+
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            System.out.println("Error al agregar docente: " + e.getMessage());
+            return false;
+        }
+        
+    }
+
+    @Override
+    public boolean mtdModificarDocente(clsEDocente objED) {
+        
+        String sql = "UPDATE tbdocente SET nombre=? WHERE codigo=?";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, objED.getNombre());
+            ps.setString(2, objED.getCodigo());
+
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            System.out.println("Error al modificar docente: " + e.getMessage());
+            return false;
+        }
+        
+    }
+
+    @Override
+    public boolean mtdEliminarDocente(clsEDocente objED) {
+        
+        String sql = "DELETE FROM tbdocente WHERE codigo=?";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, objED.getCodigo());
+
+            return ps.executeUpdate() != 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar docente: " + e.getMessage());
+            return false;
+        }
+        
+    }
+
+    @Override
+    public ResultSet mtdBuscarDocente(clsEDocente objED) {
+        
+        // Buscamos coincidencia exacta por código
+        String sql = "SELECT * FROM tbdocente WHERE codigo=?";
+        
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, objED.getCodigo());
+            rs = ps.executeQuery();
+            return rs;
+        } catch (SQLException e) {
+            System.out.println("Error al buscar docente: " + e.getMessage());
+            return null;
+        }
+        
+    }
+    
+}

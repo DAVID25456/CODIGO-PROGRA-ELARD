@@ -42,6 +42,7 @@ public class frmEmpleado extends javax.swing.JFrame {
         modelo.addColumn("CARGO");
         modelo.addColumn("USUARIO");
         modelo.addColumn("CLAVE");
+        modelo.addColumn("ESTADO");
         
         tblEmpleado.setModel(modelo);
         mtdLlenarComboCargo();
@@ -75,12 +76,14 @@ public class frmEmpleado extends javax.swing.JFrame {
         
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("DNI");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Cargo");
-        modelo.addColumn("Dirección");
-        modelo.addColumn("Teléfono");
-        modelo.addColumn("Email");
-        modelo.addColumn("Estado");
+        modelo.addColumn("NOMBRE");
+        modelo.addColumn("DIRECCION");
+        modelo.addColumn("TELEFONO");
+        modelo.addColumn("EMAIL");
+        modelo.addColumn("CARGO");
+        modelo.addColumn("USUARIO");
+        modelo.addColumn("CLAVE");
+        modelo.addColumn("ESTADO");
 
         tblEmpleado.setModel(modelo);
         ResultSet rs = objNE.mtdListarEmpleado();
@@ -514,14 +517,21 @@ public class frmEmpleado extends javax.swing.JFrame {
     private void tblEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadoMouseClicked
         
         int fila = tblEmpleado.getSelectedRow();
+
         if (fila != -1) {
-            // ... (tus otros campos de texto) ...
+            // 1. CARGAR CAMPOS DE TEXTO
+            // Los índices (0, 1, 3, 4...) dependen del orden de las columnas en tu mtdListar
+            txtDni.setText(tblEmpleado.getValueAt(fila, 0).toString());
+            txtNombre.setText(tblEmpleado.getValueAt(fila, 1).toString());
 
-            // Cargar el combo de Estado
-            String estadoTabla = tblEmpleado.getValueAt(fila, 4).toString(); // Suponiendo que es la columna 4
-            cmbEstado.setSelectedItem(estadoTabla);
+            // El índice 2 es el Cargo (lo manejamos abajo con el ComboBox)
+            txtDireccion.setText(tblEmpleado.getValueAt(fila, 3).toString());
+            txtTelefono.setText(tblEmpleado.getValueAt(fila, 4).toString());
+            txtEmail.setText(tblEmpleado.getValueAt(fila, 5).toString());
 
-            // Cargar el combo de Cargo (como lo hicimos antes)
+            // Si tienes campos para usuario y clave en la tabla, agrégalos aquí.
+            // Si no están en la tabla, el usuario deberá escribirlos al modificar.
+            // 2. CARGAR COMBO DE CARGO (Índice 2 de la tabla)
             String cargoTabla = tblEmpleado.getValueAt(fila, 2).toString();
             for (int i = 0; i < cmbCargo.getItemCount(); i++) {
                 if (cmbCargo.getItemAt(i).toString().equals(cargoTabla)) {
@@ -529,6 +539,10 @@ public class frmEmpleado extends javax.swing.JFrame {
                     break;
                 }
             }
+
+            // 3. CARGAR COMBO DE ESTADO (Índice 6 de la tabla)
+            String estadoTabla = tblEmpleado.getValueAt(fila, 6).toString();
+            cmbEstado.setSelectedItem(estadoTabla);
         }
         
     }//GEN-LAST:event_tblEmpleadoMouseClicked
