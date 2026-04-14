@@ -4,12 +4,14 @@
  */
 package CapaPresentacion;
 
-import CapaEntidad.clsECargo;
 import CapaEntidad.clsEEmpleado;
+import CapaNegocio.clsItemCargo;
+import CapaNegocio.clsNCargo;
 import CapaNegocio.clsNEmpleado;
-import java.util.ArrayList;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
 
 /**
  *
@@ -42,6 +44,86 @@ public class frmEmpleado extends javax.swing.JFrame {
         modelo.addColumn("CLAVE");
         
         tblEmpleado.setModel(modelo);
+        mtdLlenarComboCargo();
+        mtdLlenarComboEstado();
+    }
+    
+    public void mtdLimpiar() {
+        txtDni.setText("");
+        txtNombre.setText("");
+        txtDireccion.setText("");
+        txtTelefono.setText("");
+        txtEmail.setText("");
+        txtUsuario.setText("");
+        txtClave.setText("");
+        txtBDni.setText("");
+
+        // Resetear combos a la primera opción
+        if (cmbCargo.getItemCount() > 0) {
+            cmbCargo.setSelectedIndex(0);
+        }
+        if (cmbEstado.getItemCount() > 0) {
+            cmbEstado.setSelectedIndex(0);
+        }
+
+        txtDni.requestFocus(); // Pone el cursor en el DNI
+    }
+    
+    public void mtdListar() {
+        
+        clsNEmpleado objNE = new clsNEmpleado();
+        
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("DNI");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Cargo");
+        modelo.addColumn("Dirección");
+        modelo.addColumn("Teléfono");
+        modelo.addColumn("Email");
+        modelo.addColumn("Estado");
+
+        tblEmpleado.setModel(modelo);
+        ResultSet rs = objNE.mtdListarEmpleado();
+        Object[] fila = new Object[7];
+
+        try {
+            while (rs.next()) {
+                fila[0] = rs.getString("dni");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getString("nombre_cargo"); // Alias del INNER JOIN
+                fila[3] = rs.getString("direccion");
+                fila[4] = rs.getString("telefono");
+                fila[5] = rs.getString("email");
+                fila[6] = rs.getString("estado");
+                modelo.addRow(fila);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar empleados: " + e.getMessage());
+        }
+    }
+    
+    private void mtdLlenarComboCargo() {
+        clsNCargo objNC = new clsNCargo();
+        ResultSet rs = objNC.mtdListarCargo();
+        cmbCargo.removeAllItems(); // Limpia el combo antes de llenar
+
+        try {
+            while (rs.next()) {
+                // Agregamos el objeto personalizado al ComboBox
+                cmbCargo.addItem(new clsItemCargo(
+                    rs.getInt("codigo"), 
+                    rs.getString("descripcion")
+                ));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al llenar combo: " + e.getMessage());
+        }
+    }
+    
+    private void mtdLlenarComboEstado() {
+        cmbEstado.removeAllItems();
+        cmbEstado.addItem("Activo");
+        cmbEstado.addItem("Inactivo");
     }
 
     /**
@@ -71,12 +153,14 @@ public class frmEmpleado extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         txtUsuario = new javax.swing.JTextField();
         txtClave = new javax.swing.JTextField();
-        cmbCargo = new javax.swing.JComboBox<>();
+        cmbCargo = new javax.swing.JComboBox();
         btnAgregar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnListar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        cmbEstado = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEmpleado = new javax.swing.JTable();
         lblBDni = new javax.swing.JLabel();
@@ -166,7 +250,7 @@ public class frmEmpleado extends javax.swing.JFrame {
 
         cmbCargo.setBackground(new java.awt.Color(214, 234, 223));
         cmbCargo.setForeground(new java.awt.Color(0, 0, 0));
-        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnAgregar.setBackground(new java.awt.Color(204, 255, 255));
         btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
@@ -193,6 +277,14 @@ public class frmEmpleado extends javax.swing.JFrame {
         btnLimpiar.setText("LIMPIAR");
         btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("ESTADO");
+
+        cmbEstado.setBackground(new java.awt.Color(214, 234, 223));
+        cmbEstado.setForeground(new java.awt.Color(0, 0, 0));
+        cmbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -209,18 +301,25 @@ public class frmEmpleado extends javax.swing.JFrame {
                             .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblCargo, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblClave, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(lblClave, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(cmbCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtDni)
-                                .addComponent(txtEmail)
-                                .addComponent(txtTelefono)
-                                .addComponent(txtUsuario)
-                                .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cmbCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtDni)
+                                        .addComponent(txtEmail)
+                                        .addComponent(txtTelefono)
+                                        .addComponent(txtUsuario)
+                                        .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                                .addGap(118, 118, 118))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addComponent(btnAgregar)
@@ -232,8 +331,7 @@ public class frmEmpleado extends javax.swing.JFrame {
                         .addComponent(btnListar)
                         .addGap(18, 18, 18)
                         .addComponent(btnLimpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(118, 118, 118))
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,6 +368,10 @@ public class frmEmpleado extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblClave))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
@@ -277,7 +379,7 @@ public class frmEmpleado extends javax.swing.JFrame {
                     .addComponent(btnEliminar)
                     .addComponent(btnListar)
                     .addComponent(btnLimpiar))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         tblEmpleado.setModel(new javax.swing.table.DefaultTableModel(
@@ -341,55 +443,151 @@ public class frmEmpleado extends javax.swing.JFrame {
                     .addComponent(lblBDni)
                     .addComponent(txtBDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addGap(0, 2, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+        clsEEmpleado objEE = new clsEEmpleado();
+        clsNEmpleado objNE = new clsNEmpleado();
+        
+        // Validar que haya algo seleccionado en los combos para evitar errores de puntero nulo
+        if (cmbCargo.getSelectedItem() == null || cmbEstado.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un cargo y un estado.");
+            return;
+        }
 
+        // 1. Llenar entidad con los campos de texto
+        objEE.setDni(txtDni.getText());
+        objEE.setNombre(txtNombre.getText());
+        objEE.setDireccion(txtDireccion.getText());
+        objEE.setTelefono(txtTelefono.getText());
+        objEE.setEmail(txtEmail.getText());
+        objEE.setUsuario(txtUsuario.getText());
+        objEE.setClave(txtClave.getText());
+
+        // 2. CAPTURAR ID DEL CARGO (Desde el objeto clsItemCargo)
+        clsItemCargo cargoSeleccionado = (clsItemCargo) cmbCargo.getSelectedItem();
+        objEE.setIdcargo(cargoSeleccionado.getId());
+
+        // 3. CAPTURAR EL ESTADO (Desde el combo de texto)
+        objEE.setEstado(cmbEstado.getSelectedItem().toString());
+
+        // 4. Ejecutar inserción
+        if (objNE.mtdAgregarEmpleado(objEE)) {
+            JOptionPane.showMessageDialog(null, "Empleado guardado correctamente");
+            mtdListar();
+            mtdLimpiar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al guardar empleado");
+        }
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-
+        
+        clsEEmpleado objEE = new clsEEmpleado();
+        clsNEmpleado objNE = new clsNEmpleado();
+        
+        objEE.setDni(txtDni.getText());
+        int resp = JOptionPane.showConfirmDialog(null, "¿Desea eliminar este empleado?");
+        if (resp == JOptionPane.YES_OPTION) {
+            if (objNE.mtdEliminarEmpleado(objEE)) {
+                mtdListar();
+                mtdLimpiar();
+            }
+        }
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-
+        mtdListar();
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-
+        mtdLimpiar();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void tblEmpleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadoMouseClicked
         
-        fila = tblEmpleado.getSelectedRow();
-        
-        //VERIFICAR QUE SE A SELECIONADO ALGUNA FILA
+        int fila = tblEmpleado.getSelectedRow();
         if (fila != -1) {
+            // ... (tus otros campos de texto) ...
 
-            //ESCRIBIR LOS DATOS DE LA FILA EN LOS CAMPOS CORRESPONDIENTE
-            txtDni.setText(tblEmpleado.getValueAt(fila, 0).toString());
-            txtNombre.setText(tblEmpleado.getValueAt(fila, 1).toString());
-            txtDireccion.setText(tblEmpleado.getValueAt(fila, 2).toString());
-            txtTelefono.setText(tblEmpleado.getValueAt(fila, 3).toString());
-            txtEmail.setText(tblEmpleado.getValueAt(fila, 4).toString());
-            cmbCargo.setSelectedItem(tblEmpleado.getValueAt(fila, 5).toString());
-            txtUsuario.setText(tblEmpleado.getValueAt(fila, 6).toString());
-            txtClave.setText(tblEmpleado.getValueAt(fila, 7).toString());
-            
+            // Cargar el combo de Estado
+            String estadoTabla = tblEmpleado.getValueAt(fila, 4).toString(); // Suponiendo que es la columna 4
+            cmbEstado.setSelectedItem(estadoTabla);
+
+            // Cargar el combo de Cargo (como lo hicimos antes)
+            String cargoTabla = tblEmpleado.getValueAt(fila, 2).toString();
+            for (int i = 0; i < cmbCargo.getItemCount(); i++) {
+                if (cmbCargo.getItemAt(i).toString().equals(cargoTabla)) {
+                    cmbCargo.setSelectedIndex(i);
+                    break;
+                }
+            }
         }
         
     }//GEN-LAST:event_tblEmpleadoMouseClicked
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-
+        
+        clsEEmpleado objEE = new clsEEmpleado();
+        clsNEmpleado objNE = new clsNEmpleado();
+        
+        objEE.setDni(txtBDni.getText());
+        ResultSet rs = objNE.mtdBuscarEmpleado(objEE);
+        try {
+            if (rs.next()) {
+                txtDni.setText(rs.getString("dni"));
+                txtNombre.setText(rs.getString("nombre"));
+                txtDireccion.setText(rs.getString("direccion"));
+                txtTelefono.setText(rs.getString("telefono"));
+                txtEmail.setText(rs.getString("email"));
+                txtUsuario.setText(rs.getString("usuario"));
+                txtClave.setText(rs.getString("clave"));
+                cmbEstado.setSelectedItem(rs.getString("estado"));
+                // Para el cargo, el buscador de la tabla (Opción B anterior) es más eficiente
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        clsEEmpleado objEE = new clsEEmpleado();
+        clsNEmpleado objNE = new clsNEmpleado();
+        
+        if (txtDni.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Seleccione un empleado de la tabla");
+            return;
+        }
 
+        // 1. Llenar entidad
+        objEE.setDni(txtDni.getText());
+        objEE.setNombre(txtNombre.getText());
+        objEE.setDireccion(txtDireccion.getText());
+        objEE.setTelefono(txtTelefono.getText());
+        objEE.setEmail(txtEmail.getText());
+        objEE.setUsuario(txtUsuario.getText());
+        objEE.setClave(txtClave.getText());
+
+        // 2. Obtener datos de los combos
+        clsItemCargo cargo = (clsItemCargo) cmbCargo.getSelectedItem();
+        objEE.setIdcargo(cargo.getId());
+        objEE.setEstado(cmbEstado.getSelectedItem().toString());
+
+        // 3. Ejecutar
+        if (objNE.mtdModificarEmpleado(objEE)) {
+            JOptionPane.showMessageDialog(null, "Empleado actualizado");
+            mtdListar();
+            mtdLimpiar();
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
@@ -424,7 +622,9 @@ public class frmEmpleado extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JComboBox<String> cmbCargo;
+    private javax.swing.JComboBox cmbCargo;
+    private javax.swing.JComboBox<String> cmbEstado;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
