@@ -6,9 +6,9 @@ package CapaPresentacion;
 
 import CapaEntidad.clsECargo;
 import CapaNegocio.clsNCargo;
-import java.util.ArrayList;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
 
 /**
  *
@@ -30,10 +30,42 @@ public class frmCargo extends javax.swing.JFrame {
         initComponents();
         
         //DEFINIR LAS COLUMNAS DE LA TABLA
-        modelo.addColumn("CARGO");
+        modelo.addColumn("CODIGO");
         modelo.addColumn("DESCRIPCION");
         
         tblCargo.setModel(modelo);
+    }
+    
+    public void mtdListar() {
+        
+        clsNCargo objNC = new clsNCargo();
+        
+        // 1. Definir el modelo de la tabla
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("DESCRIPCION");
+
+        // 2. Asignar el modelo a tu JTable
+        tblCargo.setModel(modelo);
+
+        // 3. Obtener los datos desde la Capa de Negocio
+        ResultSet rs = objNC.mtdListarCargo();
+
+        // 4. Creamos un array de Object (puedes usar String, pero Object es más flexible para int)
+        Object[] datos = new Object[2];
+
+        try {
+            // 5. Recorrer el ResultSet
+            while (rs.next()) {
+                datos[0] = rs.getInt("codigo");       // Columna 1 de la BD
+                datos[1] = rs.getString("descripcion"); // Columna 2 de la BD
+
+                // Agregar la fila al modelo
+                modelo.addRow(datos);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al llenar la tabla de cargos: " + e.getMessage());
+        }
     }
 
     /**
@@ -50,17 +82,17 @@ public class frmCargo extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         lblCargo = new javax.swing.JLabel();
         lblDescripcion = new javax.swing.JLabel();
-        txtCargo = new javax.swing.JTextField();
+        txtCodigo = new javax.swing.JTextField();
         txtDescripcion = new javax.swing.JTextField();
         btnAgregar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        btnListar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        btnListar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCargo = new javax.swing.JTable();
         lblBCodigo = new javax.swing.JLabel();
-        txtBCargo = new javax.swing.JTextField();
+        txtBCodigo = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,14 +124,14 @@ public class frmCargo extends javax.swing.JFrame {
 
         lblCargo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblCargo.setForeground(new java.awt.Color(0, 0, 0));
-        lblCargo.setText("CARGO");
+        lblCargo.setText("CODIGO");
 
         lblDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(0, 0, 0));
         lblDescripcion.setText("DESCRIPCION");
 
-        txtCargo.setBackground(new java.awt.Color(214, 234, 223));
-        txtCargo.setForeground(new java.awt.Color(0, 0, 0));
+        txtCodigo.setBackground(new java.awt.Color(214, 234, 223));
+        txtCodigo.setForeground(new java.awt.Color(0, 0, 0));
 
         txtDescripcion.setBackground(new java.awt.Color(214, 234, 223));
         txtDescripcion.setForeground(new java.awt.Color(0, 0, 0));
@@ -119,15 +151,15 @@ public class frmCargo extends javax.swing.JFrame {
         btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
-        btnListar.setBackground(new java.awt.Color(204, 255, 255));
-        btnListar.setForeground(new java.awt.Color(0, 0, 0));
-        btnListar.setText("LISTAR");
-        btnListar.addActionListener(this::btnListarActionPerformed);
-
         btnLimpiar.setBackground(new java.awt.Color(204, 255, 255));
         btnLimpiar.setForeground(new java.awt.Color(0, 0, 0));
         btnLimpiar.setText("LIMPIAR");
         btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
+
+        btnListar.setBackground(new java.awt.Color(204, 255, 255));
+        btnListar.setForeground(new java.awt.Color(0, 0, 0));
+        btnListar.setText("LISTAR");
+        btnListar.addActionListener(this::btnListarActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -143,10 +175,10 @@ public class frmCargo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnListar)
                         .addGap(18, 18, 18)
                         .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(91, 91, 91))
+                        .addGap(103, 103, 103))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCargo, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -154,7 +186,7 @@ public class frmCargo extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(75, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -163,7 +195,7 @@ public class frmCargo extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCargo)
-                    .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDescripcion)
@@ -173,8 +205,8 @@ public class frmCargo extends javax.swing.JFrame {
                     .addComponent(btnModificar)
                     .addComponent(btnAgregar)
                     .addComponent(btnEliminar)
-                    .addComponent(btnListar)
-                    .addComponent(btnLimpiar))
+                    .addComponent(btnLimpiar)
+                    .addComponent(btnListar))
                 .addGap(33, 33, 33))
         );
 
@@ -199,8 +231,8 @@ public class frmCargo extends javax.swing.JFrame {
         lblBCodigo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblBCodigo.setText("BUSCAR CODIGO");
 
-        txtBCargo.setBackground(new java.awt.Color(214, 234, 223));
-        txtBCargo.setForeground(new java.awt.Color(0, 0, 0));
+        txtBCodigo.setBackground(new java.awt.Color(214, 234, 223));
+        txtBCodigo.setForeground(new java.awt.Color(0, 0, 0));
 
         btnBuscar.setBackground(new java.awt.Color(204, 255, 255));
         btnBuscar.setForeground(new java.awt.Color(0, 0, 0));
@@ -221,7 +253,7 @@ public class frmCargo extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addComponent(lblBCodigo)
                         .addGap(18, 18, 18)
-                        .addComponent(txtBCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnBuscar)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -238,7 +270,7 @@ public class frmCargo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBCodigo)
-                    .addComponent(txtBCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
@@ -247,27 +279,97 @@ public class frmCargo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+        clsECargo objEC = new clsECargo();
+        clsNCargo objNC = new clsNCargo();
+        
+        try {
+            // Convertimos el texto a int porque en la BD es int(11)
+            objEC.setCodigo(Integer.parseInt(txtCodigo.getText()));
+            objEC.setDescripcion(txtDescripcion.getText());
 
+            if (objNC.mtdAgregarCargo(objEC)) {
+                JOptionPane.showMessageDialog(null, "Cargo agregado con éxito");
+                mtdListar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al guardar");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El código debe ser un número entero.");
+        }
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        
+        clsECargo objEC = new clsECargo();
+        clsNCargo objNC = new clsNCargo();
+        
+        try {
+            objEC.setCodigo(Integer.parseInt(txtCodigo.getText()));
+            objEC.setDescripcion(txtDescripcion.getText());
 
+            if (objNC.mtdModificarCargo(objEC)) {
+                JOptionPane.showMessageDialog(null, "Cargo actualizado");
+                mtdListar();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Error en el formato de los datos.");
+        }
+        
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        
+        clsECargo objEC = new clsECargo();
+        clsNCargo objNC = new clsNCargo();
+        
+        objEC.setCodigo(Integer.parseInt(txtCodigo.getText()));
 
+        int confirmar = JOptionPane.showConfirmDialog(null, "¿Eliminar este cargo?");
+        if (confirmar == JOptionPane.YES_OPTION) {
+            if (objNC.mtdEliminarCargo(objEC)) {
+                JOptionPane.showMessageDialog(null, "Eliminado correctamente");
+                mtdListar();
+            }
+        }
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
-
-    }//GEN-LAST:event_btnListarActionPerformed
-
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-
+        txtCodigo.setText("");
+        txtDescripcion.setText("");
+        txtBCodigo.setText("");
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        
+        clsECargo objEC = new clsECargo();
+        clsNCargo objNC = new clsNCargo();
+        
+        try {
+            objEC.setCodigo(Integer.parseInt(txtBCodigo.getText()));
 
+            DefaultTableModel modelo = (DefaultTableModel) tblCargo.getModel();
+            modelo.setRowCount(0); // Limpiar tabla
+
+            ResultSet rs = objNC.mtdBuscarCargo(objEC);
+            Object[] datos = new Object[2];
+
+            if (rs.next()) {
+                datos[0] = rs.getInt("codigo");
+                datos[1] = rs.getString("descripcion");
+                modelo.addRow(datos);
+
+                // Llenar campos de edición
+                txtCodigo.setText(String.valueOf(datos[0]));
+                txtDescripcion.setText(datos[1].toString());
+            } else {
+                JOptionPane.showMessageDialog(null, "Cargo no encontrado");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ingrese un código numérico válido");
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void tblCargoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCargoMouseClicked
@@ -278,12 +380,16 @@ public class frmCargo extends javax.swing.JFrame {
         if (fila != -1) {
 
             //ESCRIBIR LOS DATOS DE LA FILA EN LOS CAMPOS CORRESPONDIENTE
-            txtCargo.setText(tblCargo.getValueAt(fila, 0).toString());
+            txtCodigo.setText(tblCargo.getValueAt(fila, 0).toString());
             txtDescripcion.setText(tblCargo.getValueAt(fila, 1).toString());
 
         }
 
     }//GEN-LAST:event_tblCargoMouseClicked
+
+    private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
+        mtdListar();
+    }//GEN-LAST:event_btnListarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,8 +431,8 @@ public class frmCargo extends javax.swing.JFrame {
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTable tblCargo;
-    private javax.swing.JTextField txtBCargo;
-    private javax.swing.JTextField txtCargo;
+    private javax.swing.JTextField txtBCodigo;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDescripcion;
     // End of variables declaration//GEN-END:variables
 }

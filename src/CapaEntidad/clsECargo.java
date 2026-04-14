@@ -23,6 +23,7 @@ public class clsECargo {
         return codigo;
     }
     
+    //GETTERS AND SETTERS
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }

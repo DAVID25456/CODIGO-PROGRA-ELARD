@@ -44,11 +44,11 @@ public class frmAlumno extends javax.swing.JFrame {
         clsNAlumno objNA = new clsNAlumno();
         
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Código");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Dirección");
-        modelo.addColumn("Teléfono");
-        modelo.addColumn("Email");
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("NOMBRE");
+        modelo.addColumn("DIRECCION");
+        modelo.addColumn("TELEFONO");
+        modelo.addColumn("EMAIL");
 
         tblAlumno.setModel(modelo);
         ResultSet rs = objNA.mtdListarAlumno();
