@@ -13,7 +13,6 @@ import java.sql.ResultSet;
  */
 public interface clsIAlumno {
     
-    //DEFINIR LOS METODOS
     public ResultSet mtdListarAlumno();
     public boolean mtdAgregarAlumno(clsEAlumno objEA);
     public boolean mtdModificarAlumno(clsEAlumno objEA);

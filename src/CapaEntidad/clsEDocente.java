@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsEDocente {
     
-    // Atributos basados en la tabla tbdocente
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbdocente
     private String codigo;
     private String nombre;
 

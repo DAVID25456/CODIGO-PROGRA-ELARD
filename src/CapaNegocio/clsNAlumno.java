@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class clsNAlumno implements clsIAlumno{
 
-    // Instancia de la conexión
+    //INSTANCIA DE LA CONEXION
     clsConexion cn = new clsConexion();
     Connection con;
     PreparedStatement ps;
@@ -27,6 +27,7 @@ public class clsNAlumno implements clsIAlumno{
     @Override
     public ResultSet mtdListarAlumno() {
         
+        //SENTENCIA SQL PARA LISTAR INFORMACION DE LA TABLA
         String sql = "SELECT * FROM tbalumno";
         
         try {
@@ -44,11 +45,14 @@ public class clsNAlumno implements clsIAlumno{
     @Override
     public boolean mtdAgregarAlumno(clsEAlumno objEA) {
         
+        //SENTENCIA SQL PARA INSERTAR VALORES A LA TABLA
         String sql = "INSERT INTO tbalumno (codigo, nombre, direccion, telefono, email) VALUES (?,?,?,?,?)";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR LOS VALORES A INSERTAR
             ps.setString(1, objEA.getCodigo());
             ps.setString(2, objEA.getNombre());
             ps.setString(3, objEA.getDireccion());
@@ -67,15 +71,21 @@ public class clsNAlumno implements clsIAlumno{
     @Override
     public boolean mtdModificarAlumno(clsEAlumno objEA) {
         
+        //SENTENCIA SQL PARA ACTUALIZAR LA INFORMACION DE UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "UPDATE tbalumno SET nombre=?, direccion=?, telefono=?, email=? WHERE codigo=?";
         
         try {
             con = cn.getConnection();
             ps = con.prepareStatement(sql);
+            
+            //DEFINIR VALORES A MODIFICAR
             ps.setString(1, objEA.getNombre());
             ps.setString(2, objEA.getDireccion());
             ps.setString(3, objEA.getTelefono());
             ps.setString(4, objEA.getEmail());
+            
+            //ESTE ES EL VALOR DE REFERENCIA
             ps.setString(5, objEA.getCodigo());
             
             int n = ps.executeUpdate();
@@ -90,6 +100,8 @@ public class clsNAlumno implements clsIAlumno{
     @Override
     public boolean mtdEliminarAlumno(clsEAlumno objEA) {
         
+        //SENTENCIA SQL PARA ELIMINAR UNA FILA DE LA TABLA
+        //SE HACE REFERENCIA DE LA FILA A PARTIR DEL CODIGO
         String sql = "DELETE FROM tbalumno WHERE codigo=?";
         
         try {
@@ -109,6 +121,8 @@ public class clsNAlumno implements clsIAlumno{
     @Override
     public ResultSet mtdBuscarAlumno(clsEAlumno objEA) {
         
+        //SENTENCIA SQL PARA LISTAR LA INFORMACION
+        //SEGUN LA REFERENCIA AL VALOR CODIGO
         String sql = "SELECT * FROM tbalumno WHERE codigo = ?";
         
         try {

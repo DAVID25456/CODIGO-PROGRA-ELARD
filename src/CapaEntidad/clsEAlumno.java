@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsEAlumno {
     
-    // Definir los atributos basados en la tabla tbcargo
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbalumno
     private String codigo;
     private String nombre;
     private String direccion;

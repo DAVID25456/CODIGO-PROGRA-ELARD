@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsECurso {
     
-    // Atributos basados en la tabla tbcurso
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbcurso
     private String codigo;
     private String nombre;
     private int creditos;

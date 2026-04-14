@@ -13,7 +13,6 @@ import java.sql.ResultSet;
  */
 public interface clsICargo {
     
-    //DEFINIR LOS METODOS
     public ResultSet mtdListarCargo();
     public boolean mtdAgregarCargo(clsECargo objEC);
     public boolean mtdModificarCargo(clsECargo objEC);

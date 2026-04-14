@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsEClase {
  
-    // Atributos basados en la tabla tbclase
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbclase
     private String idclase;
     private String dniemp;   // FK de tbempleado
     private String codcurso; // FK de tbcurso

@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsECargo {
     
-    // Definir los atributos basados en la tabla tbcargo
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbcargo
     private int codigo;
     private String descripcion;
     

@@ -10,7 +10,7 @@ package CapaEntidad;
  */
 public class clsEEmpleado {
     
-    // Atributos basados en la tabla tbempleado
+    //DEFINIR LOS ATRIBUTOS DE LA TABLA tbempleado
     private String dni;
     private int idcargo; // Llave foránea
     private String nombre;
