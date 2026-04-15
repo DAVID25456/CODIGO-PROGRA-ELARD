@@ -32,6 +32,8 @@ public class frmCurso extends javax.swing.JFrame {
         
         modelo.addColumn("CODIGO");
         modelo.addColumn("NOMBRE");
+        modelo.addColumn("CREDITOS");
+        modelo.addColumn("PRERERQUISITO");
         
         tblCurso.setModel(modelo);
     }
@@ -41,10 +43,10 @@ public class frmCurso extends javax.swing.JFrame {
         clsNCurso objNC = new clsNCurso();
         
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Código");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Créditos");
-        modelo.addColumn("Prerrequisito");
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("NOMBRE");
+        modelo.addColumn("CREDITOS");
+        modelo.addColumn("PRERERQUISITO");
 
         tblCurso.setModel(modelo);
         ResultSet rs = objNC.mtdListarCurso();

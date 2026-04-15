@@ -143,6 +143,7 @@ public class frmMatricula extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
 
         lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
         lblTitulo.setText("MATENIMIENTO MATRICULA");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -165,52 +166,67 @@ public class frmMatricula extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(153, 204, 255));
 
         lblIdmatricula.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblIdmatricula.setForeground(new java.awt.Color(0, 0, 0));
         lblIdmatricula.setText("IDMATRICULA");
 
         lblDescripcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDescripcion.setForeground(new java.awt.Color(0, 0, 0));
         lblDescripcion.setText("FECHA");
 
         txtIdMatricula.setBackground(new java.awt.Color(214, 234, 223));
+        txtIdMatricula.setForeground(new java.awt.Color(0, 0, 0));
 
         txtFecha.setBackground(new java.awt.Color(214, 234, 223));
+        txtFecha.setForeground(new java.awt.Color(0, 0, 0));
 
         btnAgregar.setBackground(new java.awt.Color(204, 255, 255));
+        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
         btnAgregar.setText("AGREGAR");
         btnAgregar.addActionListener(this::btnAgregarActionPerformed);
 
         btnModificar.setBackground(new java.awt.Color(204, 255, 255));
+        btnModificar.setForeground(new java.awt.Color(0, 0, 0));
         btnModificar.setText("MODIFICAR");
         btnModificar.addActionListener(this::btnModificarActionPerformed);
 
         btnEliminar.setBackground(new java.awt.Color(204, 255, 255));
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
         btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
         btnLimpiar.setBackground(new java.awt.Color(204, 255, 255));
+        btnLimpiar.setForeground(new java.awt.Color(0, 0, 0));
         btnLimpiar.setText("LIMPIAR");
         btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
         btnListar.setBackground(new java.awt.Color(204, 255, 255));
+        btnListar.setForeground(new java.awt.Color(0, 0, 0));
         btnListar.setText("LISTAR");
         btnListar.addActionListener(this::btnListarActionPerformed);
 
         lblEstado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblEstado.setForeground(new java.awt.Color(0, 0, 0));
         lblEstado.setText("ESTADO");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("EMPLEADO");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ALUMNO");
 
         txtEstado.setBackground(new java.awt.Color(214, 234, 223));
+        txtEstado.setForeground(new java.awt.Color(0, 0, 0));
 
         cmbEmpleado.setBackground(new java.awt.Color(214, 234, 223));
         cmbEmpleado.setEditable(true);
+        cmbEmpleado.setForeground(new java.awt.Color(0, 0, 0));
         cmbEmpleado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cmbAlumno.setBackground(new java.awt.Color(214, 234, 223));
         cmbAlumno.setEditable(true);
+        cmbAlumno.setForeground(new java.awt.Color(0, 0, 0));
         cmbAlumno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -259,7 +275,7 @@ public class frmMatricula extends javax.swing.JFrame {
                     .addComponent(lblIdmatricula)
                     .addComponent(txtIdMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDescripcion)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
